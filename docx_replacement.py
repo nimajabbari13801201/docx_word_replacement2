@@ -11,6 +11,14 @@ def set_text_preserving_text_formatting(paragraph, text):
         r = run._element
         r.getparent().remove(r)
 file_path=''
+def replace_table_text(doc, old_word, new_word):
+    tables = doc.tables
+    for table in tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    if old_word in paragraph.text:
+                        set_text_preserving_text_formatting(paragraph, paragraph.text.replace(old_word, new_word))
 def browse():
     root = tk.Tk()
     root.withdraw()
@@ -24,6 +32,7 @@ def replace():
     for p in doc.paragraphs:
         if old in p.text:
             set_text_preserving_text_formatting(p, p.text.replace(old, new))
+    replace_table_text(doc,old,new)        
     doc.save(filepath.get())
 #create window
 window=ttk.Window(themename='darkly')
